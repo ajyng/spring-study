@@ -38,7 +38,7 @@ public class OrderItem {
 
 
 //    <----- 비즈니스 로직 ----->
-    public void cancle() {
+    public void cancel() {
         getItem().addStock(count);
     }
 
