@@ -236,4 +236,53 @@ class MemberRepositoryTest {
         member.setUsername("member2");
         em.flush(); // update가 실행되지 않는다. -> read only로 가져왔기 때문.
     }
+
+    @Test
+    public void findMemberCustom() {
+
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("BBB", 20);
+
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+        List<Member> members = memberRepository.findMemberCustom();
+
+        for (Member member : members) {
+            System.out.println("member = " + member);
+        }
+    }
+
+    @Test
+    public void JpaEventBaseEntity() throws Exception {
+
+        Member member = new Member("member1");
+        memberRepository.save(member);
+
+        Thread.sleep(100);
+        member.setUsername("member2");
+
+        em.flush();
+        em.clear();
+
+        Member findMember = memberRepository.findById(member.getId()).get();
+
+        System.out.println("findMember.getCreatedDate() = " + findMember.getCreatedDate());
+        System.out.println("findMember.getUpdatedDate() = " + findMember.getUpdatedDate());
+    }
+
+    @Test
+    public void pageableFindAll() {
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("BBB", 20);
+
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        PageRequest pageRequest = PageRequest.of(0, 1, Sort.Direction.DESC, "username");
+        Page<Member> page = memberRepository.findAll(pageRequest);
+
+        System.out.println("page.getContent() = " + page.getContent());
+        System.out.println("page.getPageable() = " + page.getPageable());
+        System.out.println("page.getSize() = " + page.getSize());
+    }
 }

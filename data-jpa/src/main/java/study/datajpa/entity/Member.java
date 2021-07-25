@@ -1,6 +1,7 @@
 package study.datajpa.entity;
 
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 
@@ -12,7 +13,7 @@ import javax.persistence.*;
         name="Member.findByUsername",
         query="select m from Member m where m.username = :username"
 ) // Entity에 직접 jpql 쿼리 등록
-public class Member {
+public class Member extends JpaBaseEntity{
 
     @Id @GeneratedValue
     @Column(name = "member_id")
